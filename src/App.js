@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import './App.css';
+
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 function App() {
 
   const [city,setCity] = useState("Bangalore");
   const [temp, setTemp] = useState(0);
-  const [description, setDescription] = useState("");
 
 
   useEffect(()=>{
     async function loadData(){
-      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3d4707888caelcef35d3b4069b3862d3`)
-      console.log(response.data);
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3d4707888cae1cef35d3b4069b3862d3`)
+      if(response.status === 200){
+        const temp =(response.data.main.temp - 273.15);
+         console.log(temp);
+         setTemp(temp)
+      }
     }
     loadData();
   }, [city])
@@ -21,7 +27,7 @@ function App() {
   return (
   <>
   <div className='heading col-md-12 mt-5'>
-    <h2 className='mt-4'>WHEATHER API</h2>
+    <h2 className='mt-1 name'>WEATHER API</h2>
   </div>
   <div className='row mt-5'>
     <div className='col-md-6 div-search'>
@@ -33,8 +39,11 @@ function App() {
     </div>
 
     <div className='col-md-6 display'>
-      <h1>City: {city}</h1>
+      <button className="btn btn-outline-warning button mt-3" ><h3>City: {city}</h3></button> <br></br>
+      <h3>Temprature: {temp}</h3>
+      <img className="image-sec" src="https://cdn-icons-png.flaticon.com/512/5491/5491388.png" ></img>
     </div>
+    
 
   </div>
 
